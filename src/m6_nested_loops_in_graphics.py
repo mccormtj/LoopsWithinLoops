@@ -3,8 +3,8 @@ This project demonstrates NESTED LOOPS (i.e., loops within loops)
 in the context of TWO-DIMENSIONAL GRAPHICS.
 
 Authors: David Mutchler, Valerie Galluzzi, Mark Hays, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Tyler McCormick.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
 
@@ -80,9 +80,22 @@ def draw_L(window, circle, r, c):
     and m and n are small, positive integers.
     """
     # ------------------------------------------------------------------
-    # TODO: 2. Implement and test this function.
+    # DONE: 2. Implement and test this function.
     #     The testing code is already written for you (above).
     # ------------------------------------------------------------------
+
+    orig_circle_x = circle.center.x
+    cur_circle_y = circle.center.y
+
+    for k in range(r):
+        cur_circle_x = orig_circle_x
+        for j in range(3):
+            new_circle = rg.Circle(rg.Point(cur_circle_x, cur_circle_y), circle.radius)
+            new_circle.fill_color = circle.fill_color
+            new_circle.attach_to(window)
+            window.render(.1)
+            cur_circle_x += 2 * circle.radius
+        cur_circle_y += circle.radius * 2
 
 
 def run_test_draw_wall_on_right():
@@ -121,9 +134,30 @@ def draw_wall_on_right(rectangle, n, window):
     and n is a small, positive integer.
     """
     # ------------------------------------------------------------------
-    # TODO: 3. Implement and test this function.
+    # DONE: 3. Implement and test this function.
     #     The testing code is already written for you (above).
     # ------------------------------------------------------------------
+
+    upper_left_point = rectangle.get_upper_left_corner()
+    diag_upper_left_x = upper_left_point.x
+    upper_left_y = upper_left_point.y
+
+    for row_num in range(n):
+        row_left_x = diag_upper_left_x
+        print("\nRow {}".format(row_num))
+        for rect_num in range(row_num+1):
+            top_left = rg.Point(row_left_x, upper_left_y)
+            bottom_right = top_left.clone()
+            bottom_right.move_by(rectangle.get_width(), rectangle.get_height())
+
+            new_rectangle = rg.Rectangle(top_left, bottom_right)
+            new_rectangle.attach_to(window)
+            window.render(0.1)
+
+            row_left_x += rectangle.get_width()
+
+        upper_left_y += rectangle.get_height()
+        diag_upper_left_x -= rectangle.get_width()
 
 
 # ----------------------------------------------------------------------
